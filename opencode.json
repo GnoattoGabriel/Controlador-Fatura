@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": { "servers": { "metro-mcp": { "type": "local", "command": ["npx", "-y", "metro-mcp"] } } },
+  "instructions": [
+    "C:/Users/Mille/Desktop/Coisas/Vault Obsidian/Walter/App Fatura Familiar — Escopo.md",
+    "C:/Users/Mille/Desktop/Coisas/Vault Obsidian/Walter/Fatura Familiar - *.md"
+  ],
+  "references": {
+    "fatura-docs": {
+      "path": "C:/Users/Mille/Desktop/Coisas/Vault Obsidian/Walter",
+      "description": "Escopo do App Fatura Familiar no Obsidian; leia o hub App Fatura Familiar — Escopo e siga os links antes de implementar."
+    }
+  }
+}
