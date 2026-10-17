@@ -13,6 +13,7 @@
         "buildType": "apk"
       },
       "distribution": "internal",
+      "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://rmcklidnldchqpnrbcca.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_YEfDKrshIQgf-nTq7HpSCw_IRH91JHH"
