@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   addInvoiceMonths,
+  centsFromDigits,
+  formatCentsInput,
   invoiceMonthForDate,
   minhaParte,
   parseBRLToCents,
@@ -52,6 +54,34 @@ describe('parseBRLToCents', () => {
     expect(() => parseBRLToCents('abc')).toThrow();
     expect(() => parseBRLToCents('0')).toThrow();
     expect(() => parseBRLToCents('-5')).toThrow();
+  });
+});
+
+describe('máscara de moeda (centavos-primeiro)', () => {
+  it('cada dígito entra nos centavos', () => {
+    expect(centsFromDigits('5')).toBe(5); // R$ 0,05
+    expect(centsFromDigits('50')).toBe(50); // R$ 0,50
+    expect(centsFromDigits('500')).toBe(500); // R$ 5,00 (não R$ 500)
+    expect(centsFromDigits('50000')).toBe(50000); // R$ 500,00
+  });
+
+  it('ignora caracteres não-numéricos', () => {
+    expect(centsFromDigits('R$ 1.234,56')).toBe(123456);
+    expect(centsFromDigits('abc')).toBe(0);
+    expect(centsFromDigits('')).toBe(0);
+  });
+
+  it('formata para exibição sem "R$"', () => {
+    expect(formatCentsInput(0)).toBe('0,00');
+    expect(formatCentsInput(5)).toBe('0,05');
+    expect(formatCentsInput(500)).toBe('5,00');
+    expect(formatCentsInput(123456)).toBe('1.234,56');
+  });
+
+  it('round-trip dígitos → centavos → texto', () => {
+    for (const d of ['500', '12345', '999999']) {
+      expect(centsFromDigits(formatCentsInput(centsFromDigits(d)))).toBe(centsFromDigits(d));
+    }
   });
 });
 

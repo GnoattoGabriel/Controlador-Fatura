@@ -24,3 +24,10 @@ select id, nome, role from public.profiles where role = 'admin';
 -- 5. Teste de isolamento de verdade (Sprint 3, com logins reais):
 --    logar como member no app e confirmar que só voltam as próprias compras,
 --    sem total geral. Via SQL não dá para impersonar sem JWT; o teste final é no app.
+
+-- 6. Pix (0003): app_settings existe com RLS ligada e 1 linha (esperado: 1 linha role=admin).
+select tablename, rowsecurity
+from pg_tables
+where schemaname = 'public' and tablename = 'app_settings';
+
+select id, pix_chave, pix_nome, pix_cidade from public.app_settings;

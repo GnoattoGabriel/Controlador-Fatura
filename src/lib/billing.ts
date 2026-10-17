@@ -66,6 +66,25 @@ export function parseBRLToCents(text: string): number {
 }
 
 /**
+ * Máscara de entrada de moeda (centavos-primeiro): cada dígito digitado entra nos
+ * CENTAVOS, eliminando a ambiguidade "500" = R$ 5,00 (e não R$ 500 → digita "50000").
+ * Ignora qualquer caractere não-numérico. `"500"` → 500; `"50000"` → 50000.
+ */
+export function centsFromDigits(input: string): number {
+  const digits = input.replace(/\D/g, '').slice(0, 12); // teto ~ R$ 9.999.999.999,99
+  if (!digits) return 0;
+  return Number(digits);
+}
+
+/** Formata centavos para exibição dentro do input, sem "R$": `500` → "5,00". */
+export function formatCentsInput(cents: number): string {
+  const safe = Number.isFinite(cents) && cents > 0 ? Math.floor(cents) : 0;
+  const reais = String(Math.floor(safe / 100)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const cent = String(safe % 100).padStart(2, '0');
+  return `${reais},${cent}`;
+}
+
+/**
  * minhaParte(mes) = vistas(mes) + parcelas vincendas + fixas ativas.
  * - vistas: tipo=vista com mes_inicio == mes.
  * - parcelas: installments (só de parceladas) com mes == mes.

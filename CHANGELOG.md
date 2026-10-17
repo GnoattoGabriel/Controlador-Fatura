@@ -4,6 +4,17 @@ Todas as mudanças relevantes do **Fatura Familiar** são documentadas aqui.
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 [SemVer](https://semver.org/lang/pt-BR/).
 
+## [Unreleased] — alvo **1.0.0** (MAJOR)
+
+### Adicionado
+- Pix estático (BR Code): gerador do "Copia e Cola" com CRC16/CCITT-FALSE (`src/lib/pix.ts`) + testes.
+- Máscara de entrada de moeda centavos-primeiro (`centsFromDigits` / `formatCentsInput`) + testes.
+- Migration `0003_pix.sql`: tabela `app_settings` (chave Pix do recebedor — leitura para todo autenticado, escrita só admin).
+
+### Pendente nesta versão
+- Redesenho do `PayModal`: confirmação do valor total + campo "quanto quero pagar" (máscara + botões +R$10/+R$20/+R$50) + QR real.
+- Tela de configuração da chave Pix (admin).
+
 ## [0.1.0] - 2026-10-17
 
 ### Adicionado
