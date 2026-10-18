@@ -96,6 +96,11 @@ export function PurchaseList({ userId, role, title, ownName }: Props) {
   const theme = useTheme();
 
   const summary = useMemo(() => summarizeInvoice(items), [items]);
+  // Base da cobrança do admin: total geral, ou o total do membro filtrado.
+  const chargeBase = useMemo(() => {
+    if (!memberFilter) return summary.totalCentavos;
+    return summary.byMember.find((m) => m.memberId === memberFilter)?.totalCentavos ?? summary.totalCentavos;
+  }, [memberFilter, summary]);
   const visibleItems = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter(
@@ -307,6 +312,16 @@ export function PurchaseList({ userId, role, title, ownName }: Props) {
                   <ThemedText type="display">{formatCentsBRL(summary.totalCentavos)}</ThemedText>
                 </View>
                 <MemberDropdown members={summary.byMember} selected={memberFilter} onSelect={setMemberFilter} />
+                <View style={styles.ioRow}>
+                  <Pressable
+                    onPress={() => {
+                      setPayBase(chargeBase);
+                      setPayOpen(true);
+                    }}
+                    style={[styles.ioBtn, { borderColor: Brand.violet }]}>
+                    <ThemedText type="small">Cobrar no Pix</ThemedText>
+                  </Pressable>
+                </View>
               </View>
             ) : (
               <>
@@ -369,8 +384,9 @@ export function PurchaseList({ userId, role, title, ownName }: Props) {
         />
         <PayModal
           visible={payOpen}
+          role={role}
           baseCentavos={payBase}
-          title={editable ? 'Cobrar fatura' : 'Pagar fatura'}
+          monthLabel={formatInvoiceMonth(mes)}
           onClose={() => setPayOpen(false)}
         />
         <Modal visible={confirmClose} transparent animationType="fade" onRequestClose={() => setConfirmClose(false)}>

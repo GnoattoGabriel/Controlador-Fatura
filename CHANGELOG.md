@@ -4,16 +4,31 @@ Todas as mudanças relevantes do **Fatura Familiar** são documentadas aqui.
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 [SemVer](https://semver.org/lang/pt-BR/).
 
-## [Unreleased] — alvo **1.0.0** (MAJOR)
+## [1.0.0] - 2026-10-17
 
 ### Adicionado
-- Pix estático (BR Code): gerador do "Copia e Cola" com CRC16/CCITT-FALSE (`src/lib/pix.ts`) + testes.
-- Máscara de entrada de moeda centavos-primeiro (`centsFromDigits` / `formatCentsInput`) + testes.
-- Migration `0003_pix.sql`: tabela `app_settings` (chave Pix do recebedor — leitura para todo autenticado, escrita só admin).
+- **Pix estático (BR Code)**: gerador do "Copia e Cola" com CRC16/CCITT-FALSE (`src/lib/pix.ts`) + testes.
+- Máscara de entrada de moeda centavos-primeiro (`centsFromDigits` / `formatCentsInput`) — `500` = R$ 5,00, `50000` = R$ 500,00 — + testes.
+- Migration `0003_pix.sql`: tabela `app_settings` (chave do recebedor; leitura para todo autenticado, escrita só admin).
+- `PayModal` em duas etapas: confirma o valor (total + "quanto quero pagar" com botões +R$10/+R$20/+R$50) e só então mostra o QR + Pix Copia e Cola + Copiar/Compartilhar.
+- `CurrencyInput` (máscara), `QrCode` (grade de `View`s — sem `react-native-svg`) e `PixSettingsModal` (chave, nome, cidade + prévia do QR).
+- Seção **Conta › Pix** para o admin configurar a chave.
+- Gatilho "Cobrar no Pix" no card de total do admin (usa o total do membro filtrado, se houver).
 
-### Pendente nesta versão
-- Redesenho do `PayModal`: confirmação do valor total + campo "quanto quero pagar" (máscara + botões +R$10/+R$20/+R$50) + QR real.
-- Tela de configuração da chave Pix (admin).
+### Alterado
+- O modal de pagamento deixa de ser um QR ilustrativo e passa a gerar um Pix de verdade (BR Code estático).
+
+### Notas
+- O QR é montado no aparelho de quem paga, com o valor escolhido; só a chave é persistida.
+- Member sem chave cadastrada vê aviso pedindo para o admin configurar em Conta › Pix.
+- `versionName` interno passa a bater com a tag (o build de 0.1.0 reportava `1.0.0` por ter sido feito antes da adoção do SemVer).
+
+### Técnico
+- Build EAS / versionCode / tamanho do APK: a registrar após o build desta versão.
+
+<!-- Links de comparação (adicionar conforme novas tags):
+[1.0.0]: https://github.com/GnoattoGabriel/Controlador-Fatura/compare/v0.1.0...v1.0.0
+-->
 
 ## [0.1.0] - 2026-10-17
 
@@ -38,10 +53,6 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 ### Técnico
 - Build EAS: `5352e5d1` · Commit: `42825f7` · versionCode: 1 · APK: 35,9 MB
 - Link: https://expo.dev/accounts/gnoattogabriel/projects/fatura-familiar/builds/5352e5d1-2a35-4732-8a3b-29275a3cd6ce
-
-<!-- Link de comparação entre versões (adicionar conforme novas tags):
-[0.1.1]: https://github.com/GnoattoGabriel/Controlador-Fatura/compare/v0.1.0...v0.1.1
--->
 
 ---
 

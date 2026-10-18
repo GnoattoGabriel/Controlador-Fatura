@@ -1,17 +1,19 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ImportFlow } from '@/components/import-flow';
+import { PixSettingsModal } from '@/components/pix-settings';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Brand, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useInvoiceData } from '@/hooks/use-invoice';
 import { summarizeInvoice } from '@/lib/billing';
 import { exportExcel, exportPdf } from '@/lib/export';
 import { formatInvoiceMonth } from '@/lib/format';
 import { currentInvoiceMonth } from '@/lib/queries';
+import { fetchPixSettings, isPixConfigured, type PixSettings as PixSettingsData } from '@/lib/settings';
 import { useAuth } from '@/stores/auth';
 
 export default function AccountScreen() {
@@ -21,7 +23,20 @@ export default function AccountScreen() {
   const theme = useTheme();
   const [importOpen, setImportOpen] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [pixOpen, setPixOpen] = useState(false);
+  const [pix, setPix] = useState<PixSettingsData | null>(null);
   const mes = useMemo(() => currentInvoiceMonth(), []);
+
+  const loadPix = useCallback(() => {
+    fetchPixSettings()
+      .then(setPix)
+      .catch(() => setPix(null));
+  }, []);
+
+  useEffect(() => {
+    if (profile?.role !== 'admin') return;
+    loadPix();
+  }, [profile?.role, loadPix]);
 
   const { items, refresh } = useInvoiceData(mes, profile?.id ?? '', (profile?.role ?? 'admin') as 'admin', profile?.nome);
   const summary = useMemo(() => summarizeInvoice(items), [items]);
@@ -68,6 +83,22 @@ export default function AccountScreen() {
           </View>
         </View>
 
+        <View style={styles.group}>
+          <ThemedText type="smallBold">Pix</ThemedText>
+          <View style={styles.ioRow}>
+            <Pressable
+              onPress={() => setPixOpen(true)}
+              style={[styles.ioBtn, { borderColor: Brand.violet }]}>
+              <ThemedText type="small">Configurar chave</ThemedText>
+            </Pressable>
+          </View>
+          <ThemedText type="small">
+            {pix && isPixConfigured(pix)
+              ? `Chave configurada — ${pix.nome}.`
+              : 'Ainda não configurada (o QR não aparece até salvar).'}
+          </ThemedText>
+        </View>
+
         <View style={styles.actions}>
           <Pressable onPress={lock}>
             <ThemedText type="small">Bloquear</ThemedText>
@@ -78,6 +109,13 @@ export default function AccountScreen() {
         </View>
 
         <ImportFlow visible={importOpen} onClose={() => setImportOpen(false)} onImported={() => refresh()} />
+        <PixSettingsModal
+          visible={pixOpen}
+          onClose={() => {
+            setPixOpen(false);
+            loadPix();
+          }}
+        />
       </SafeAreaView>
     </ThemedView>
   );
