@@ -1,10 +1,10 @@
 # Fatura Familiar — App Expo + Supabase
 
-Controle de fatura de cartão compartilhada da família. Regra: **quem gastou, paga**.
+Controle de fatura de cartão compartilhada da família.
 
 ## Documentação
 
-Fonte de verdade do escopo: Obsidian (`App Fatura Familiar — Escopo` + notas ligadas).
+Fonte de verdade do escopo: Obsidian (`App Fatura — Escopo` + notas ligadas).
 Este `docs/` é o espelho técnico executável no repo.
 
 - `docs/README.md` — mapa
@@ -21,4 +21,4 @@ Expo Router + TypeScript, Zustand, Supabase (Postgres + Auth + Realtime). SQLite
 
 ## Estado
 
-Greenfield — sem `package.json`, sem código. Ver `docs/06-pendencias.md` antes do scaffold.
+Greenfield — Ver `docs/06-pendencias.md` antes do scaffold.
