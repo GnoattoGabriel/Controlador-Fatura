@@ -4,6 +4,13 @@ Todas as mudanças relevantes do **Fatura Familiar** são documentadas aqui.
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 [SemVer](https://semver.org/lang/pt-BR/).
 
+## [Não lançado]
+
+### Segurança
+- `.env.example` recriado somente com placeholders; a chave secreta (`sb_secret_…`) saiu do repositório público e foi rotacionada no Supabase.
+- `.gitignore` agora ignora `.env` e `.env.*`, mantendo apenas `!.env.example` versionado como modelo.
+- Chave secreta nunca deve entrar no app (nem em `.env.local`, nem em `EXPO_PUBLIC_*`, nem em `app.json`/`eas.json`): só dashboard do Supabase, Edge Function secrets ou gerenciador de senhas.
+
 ## [1.0.0] - 2026-10-17
 
 ### Adicionado
@@ -24,7 +31,8 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 - `versionName` interno passa a bater com a tag (o build de 0.1.0 reportava `1.0.0` por ter sido feito antes da adoção do SemVer).
 
 ### Técnico
-- Build EAS / versionCode / tamanho do APK: a registrar após o build desta versão.
+- Build EAS: `b8f0e331` · Commit: `d17dc17` · versionCode: 2 · APK: 35,9 MB
+- Link: https://expo.dev/accounts/gnoattogabriel/projects/fatura-familiar/builds/b8f0e331-9d83-4796-9038-1dcf8052d339
 
 <!-- Links de comparação (adicionar conforme novas tags):
 [1.0.0]: https://github.com/GnoattoGabriel/Controlador-Fatura/compare/v0.1.0...v1.0.0
